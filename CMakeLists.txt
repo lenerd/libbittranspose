@@ -3,6 +3,7 @@ project(bittranspose VERSION 0.1 LANGUAGES C CXX)
 
 option(BITTRANSPOSE_USE_AVX2 "Use AVX2 intrinsics instead of plain C")
 option(BITTRANSPOSE_BUILD_TESTS "Build unit tests")
+option(BITTRANSPOSE_BUILD_BENCHMARKS "Build benchmarks")
 
 add_library(bittranspose)
 
@@ -37,4 +38,16 @@ if(BITTRANSPOSE_BUILD_TESTS)
     test/test_square_transpose.cpp
   )
   target_link_libraries(test bittranspose Catch2::Catch2)
+endif()
+
+
+if(BITTRANSPOSE_BUILD_BENCHMARKS)
+  set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Don't build tests for the benchmark library")
+  set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "Don't install the benchmark library")
+  add_subdirectory(extern/benchmark)
+
+  add_executable(transpose_benchmark
+    benchmark/bench_square_transpose.cpp
+  )
+  target_link_libraries(transpose_benchmark bittranspose benchmark::benchmark benchmark::benchmark_main)
 endif()
