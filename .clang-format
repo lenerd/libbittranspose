@@ -1,0 +1,9 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+AllowShortFunctionsOnASingleLine: Inline
+BreakBeforeBinaryOperators: NonAssignment
+ColumnLimit: 100
+DerivePointerAlignment: false
+IndentWidth: 4
+PointerAlignment: Left
