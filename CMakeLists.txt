@@ -6,6 +6,7 @@ option(BITTRANSPOSE_BUILD_TESTS "Build unit tests")
 option(BITTRANSPOSE_BUILD_BENCHMARKS "Build benchmarks")
 
 add_library(bittranspose)
+add_library(bittranspose::bittranspose ALIAS bittranspose)
 
 # Combine multiple sources into a single one to allow inlining.
 set_target_properties(bittranspose PROPERTIES UNITY_BUILD_MODE GROUP)
@@ -28,7 +29,13 @@ target_sources(bittranspose PRIVATE ${SOURCE_FILES})
 # Put all sources into the same UNITY_GROUP
 set_source_files_properties(${SOURCE_FILES} PROPERTIES UNITY_GROUP "unity_group")
 
-target_include_directories(bittranspose PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(bittranspose
+  PUBLIC
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
 
 if(BITTRANSPOSE_BUILD_TESTS)
@@ -56,3 +63,23 @@ if(BITTRANSPOSE_BUILD_BENCHMARKS)
   )
   target_link_libraries(transpose_benchmark bittranspose benchmark::benchmark benchmark::benchmark_main)
 endif()
+
+# Installation
+include(GNUInstallDirs)
+# - install library
+install(TARGETS bittranspose
+  EXPORT bittranspose-targets
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+)
+# - install header
+install(DIRECTORY include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+# - install config file
+install(EXPORT bittranspose-targets
+  FILE bittranspose-config.cmake
+  NAMESPACE bittranspose::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bittranspose
+)
+
+# Export
+export(TARGETS bittranspose NAMESPACE bittranspose:: FILE bittranspose-config.cmake)
