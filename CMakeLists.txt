@@ -15,6 +15,7 @@ if(${BITTRANSPOSE_USE_AVX2})
   set(SOURCE_FILES
     src/transpose_square_common.c
     src/transpose_square_avx2.c
+    src/transpose_rectangular_avx2.c
   )
 else()
   set(SOURCE_FILES
