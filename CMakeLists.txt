@@ -20,6 +20,7 @@ else()
   set(SOURCE_FILES
     src/transpose_square_common.c
     src/transpose_square_plain.c
+    src/transpose_rectangular_plain.c
   )
 endif()
 target_sources(bittranspose PRIVATE ${SOURCE_FILES})
@@ -35,7 +36,9 @@ if(BITTRANSPOSE_BUILD_TESTS)
   add_executable(test
     test/main.cpp
     test/test_data_square.cpp
+    test/test_data_rectangular.cpp
     test/test_square_transpose.cpp
+    test/test_rectangular_transpose.cpp
   )
   target_link_libraries(test bittranspose Catch2::Catch2)
 endif()

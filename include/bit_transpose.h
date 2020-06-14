@@ -28,6 +28,7 @@
 extern "C" {
 #endif
 
+#include <stddef.h>
 #include <stdint.h>
 
 /* Functions to transpose square bit matrices.
@@ -51,6 +52,27 @@ void transpose_bit_64x64_inplace(void* input);
 void transpose_bit_64x64_inplace_aligned(void* input);
 void transpose_bit_128x128_inplace(void* input);
 void transpose_bit_128x128_inplace_aligned(void* input);
+
+/* Functions to transpose rectangular bit matrices of size (k x m) where k is
+ * one of 8/16/32/64/128 and m = k * N.  Thus, N denotes the number of (k x k)
+ * blocks of the matrix.
+ *
+ * For the kxN variants:
+ * - src is an array of k pointers which in turn point to rows of size N*k bits each
+ * - dst is a buffer of size N*k*k
+ *
+ * For the Nxk variants it is the other way round.
+ */
+void transpose_bit_8xN(uint8_t* dst, const uint8_t* const* src, size_t N);
+void transpose_bit_Nx8(uint8_t** dst, const uint8_t* src, size_t N);
+void transpose_bit_16xN(uint16_t* dst, const uint8_t* const* src, size_t N);
+void transpose_bit_Nx16(uint8_t** dst, const uint16_t* src, size_t N);
+void transpose_bit_32xN(uint32_t* dst, const uint8_t* const* src, size_t N);
+void transpose_bit_Nx32(uint8_t** dst, const uint32_t* src, size_t N);
+void transpose_bit_64xN(uint64_t* dst, const uint8_t* const* src, size_t N);
+void transpose_bit_Nx64(uint8_t** dst, const uint64_t* src, size_t N);
+void transpose_bit_128xN(uint8_t* dst, const uint8_t* const* src, size_t N);
+void transpose_bit_Nx128(uint8_t** dst, const uint8_t* src, size_t N);
 
 #ifdef __cplusplus
 }
