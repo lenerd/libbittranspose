@@ -52,6 +52,7 @@ if(BITTRANSPOSE_BUILD_BENCHMARKS)
 
   add_executable(transpose_benchmark
     benchmark/bench_square_transpose.cpp
+    benchmark/bench_rectangular_transpose.cpp
   )
   target_link_libraries(transpose_benchmark bittranspose benchmark::benchmark benchmark::benchmark_main)
 endif()
